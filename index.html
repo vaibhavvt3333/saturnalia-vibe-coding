@@ -21,31 +21,37 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--
 .gamehud .hudbox{min-width:124px;background:#153653e5;border-color:#a9d5d8ab}
 .gamehud{top:16px}.screen{background:linear-gradient(118deg,#071d39e8,#2b2c56c7);backdrop-filter:blur(4px)}.gameprompt{background:#183d5be8;border-color:#c5f2de;font-weight:700;box-shadow:0 4px 17px #102d45a8}.toast{background:#204363e9}
 @media(max-width:700px){.progressHud{top:74px;width:calc(100% - 30px);max-width:350px;min-width:0;padding:8px 12px 12px}.progressLabels{font-size:8px}.progressLabels b{font-size:9px}.gamehud .hudbox{min-width:117px;padding:9px 10px}.gameprompt{bottom:13px;font-size:10px}.touch{bottom:58px}}
+/* Drone selection hangar, cargo load meter and responsive flight controls */
+.hangar{margin:12px 0 16px;text-align:left}.hangar.hidden{display:none}.hangarHead{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px;color:#e0f9f7;font-size:10px;font-weight:900;letter-spacing:.12em}.hangarHead small{font-size:9px;color:#adc6d8;letter-spacing:0;font-weight:500}
+.droneGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.dronePick{display:block;text-align:left;min-width:0;border:1px solid #567790b8;color:#e9f7fe;background:linear-gradient(150deg,#16314bee,#0b1c36ec);padding:12px 10px 11px;border-radius:11px;transition:border-color .16s,background .16s,transform .16s}.dronePick:hover{transform:translateY(-2px);border-color:#b8fff2}.dronePick.selected{border:2px solid #68f5dd;background:linear-gradient(150deg,#195c66,#173252);box-shadow:0 0 18px #40f5dc26;padding:11px 9px 10px}.dronePick .vehicleGlyph{font-size:28px;line-height:1;filter:drop-shadow(0 0 10px #97ecff90)}.dronePick b{font-size:10px;display:block;margin:9px 0 3px;letter-spacing:.03em}.dronePick .role{color:#acc7d0;font-size:9px;display:block;min-height:24px}.hangarStat{display:flex;gap:6px;align-items:center;margin-top:7px}.hangarStat span{font:700 8px ui-monospace,monospace;flex:0 0 52px;color:#c0d8e5}.hangarStat .sbar{flex:1;height:5px;background:#54718c61;border-radius:9px;overflow:hidden}.hangarStat .sbar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#59decf,#ffdc88)}.hangarNote{font-size:9px;color:#dce6e9;text-align:center;margin:8px 0 0}.screen:has(.hangar:not(.hidden)) .screeninner{max-width:670px}.screen:has(.hangar:not(.hidden)) .badgeIcon{font-size:26px;margin:5px}.screen:has(.hangar:not(.hidden)) h2{font-size:clamp(32px,5vw,49px)}.screen:has(.hangar:not(.hidden)) p{font-size:11px;line-height:1.5;margin-bottom:9px}.screen:has(.hangar:not(.hidden)) .keyrow{margin-top:12px}.screen:has(.hangar:not(.hidden)) .screeninner{padding:12px 7px}
+.loadHud{position:absolute;z-index:5;top:87px;right:16px;display:flex;gap:7px;align-items:center;justify-content:flex-end;background:#123250dc;border:1px solid #a7d2e0a4;border-radius:7px;padding:7px 10px;color:#f4fff8;font:850 11px ui-monospace,monospace;pointer-events:none;box-shadow:0 4px 14px #10253833}.loadHud b{color:#ffe6a5}.loadHud span{font-size:9px;color:#abdbd9}.screen{overflow-y:auto}
+@media(max-width:700px){.droneGrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 9px}.dronePick{min-width:165px;flex:1;scroll-snap-align:start}.screen:has(.hangar:not(.hidden)) .screeninner{margin:auto}.screen:has(.hangar:not(.hidden)) .badgeIcon{display:none}.screen:has(.hangar:not(.hidden)) h2{font-size:30px}.screen:has(.hangar:not(.hidden)) .keyrow{display:none}.screen:has(.hangar:not(.hidden)) .overline{font-size:9px}.loadHud{top:144px;right:12px;font-size:10px;padding:6px}.hangarHead small{display:block;color:#ffecb3;font-size:8px}.hangarHead small::after{content:" · SWIPE →"}}
 </style>
 </head>
 <body>
 <main class="app">
   <header class="top">
-    <div class="brand"><div class="logo"><span>✥</span></div><div><div class="brandname">SKYLINE <span style="color:var(--cyan)">/ AIRLIFT</span></div><div class="tag mono">Emergency drone operations · Unit 07</div></div></div>
+    <div class="brand"><div class="logo"><span>✥</span></div><div><div class="brandname">SKYLINE <span style="color:var(--cyan)">/ AIRLIFT</span></div><div class="tag mono">Emergency drone operations · Fleet Hangar</div></div></div>
     <div class="topright"><span class="mono"><span class="live"></span> &nbsp; OPERATIONS LIVE</span><button id="soundBtn" class="microbtn" aria-label="Toggle sound">♫ SOUND ON</button><button id="pauseBtn" class="microbtn" aria-label="Pause game">Ⅱ PAUSE</button></div>
   </header>
   <div class="grid">
     <section class="gamecol">
-      <div class="headline"><div><div class="eyebrow mono">// SATURNALIA 2026 · DRONE CHALLENGE</div><h1>THE SUNSET <span>AIRLIFT.</span></h1><p>Fly the sunset skyline. Clear the hazards. Deliver what matters.</p></div><div class="safetag mono">[ 01 / 03 ] &nbsp; RESCUE PROTOCOL</div></div>
+      <div class="headline"><div><div class="eyebrow mono">// SATURNALIA 2026 · DRONE CHALLENGE</div><h1>THE SUNSET <span>AIRLIFT V3.</span></h1><p>Fly the sunset skyline. Clear the hazards. Deliver what matters.</p></div><div class="safetag mono">[ 01 / 03 ] &nbsp; RESCUE PROTOCOL</div></div>
       <div class="stage" id="stage">
         <canvas id="game" aria-label="A side-view drone rescue side-scroller. Fly with WASD or arrow keys and press space to pick up and deliver cargo."></canvas>
         <div class="gamehud"><div class="hudbox"><small class="mono">Remaining time</small><b id="hudTime">01:45</b></div><div class="hudbox right"><small class="mono">Operation score</small><b id="hudScore" class="gold">00000</b></div></div>
         <div class="progressHud" aria-label="Flight position on delivery route"><div class="progressLabels"><span>🏙 CITY / PICKUP</span><b id="progressText">0% OF ROUTE</b><span>✚ DROP ZONE</span></div><div class="progressRail"><div id="progressFill" class="progressFill"></div><div id="progressMarker" class="progressMarker">✦</div></div></div>
+        <div class="loadHud"><span id="activeDrone">SAT-04</span> 📦 <b id="loadText">0/2</b></div>
         <div class="toast" id="toast" role="status" aria-live="polite"></div>
         <div class="gameprompt" id="prompt">READY FOR DEPLOYMENT <strong>◆</strong></div>
         <div class="touch" id="touch"><div class="dpad"><button class="up" data-control="up" aria-label="Fly up">▲</button><button class="left" data-control="left" aria-label="Fly left">◀</button><button class="down" data-control="down" aria-label="Fly down">▼</button><button class="rightpad" data-control="right" aria-label="Fly right">▶</button></div><div class="touchActions"><button class="interact" data-control="interact">PICK / DROP</button><button data-control="boost">BOOST ⚡</button></div></div>
-        <div class="screen" id="screen"><div class="screeninner"><div class="overline mono" id="screenTag">INCOMING DISTRESS SIGNAL</div><div class="badgeIcon" id="screenIcon">✥</div><h2 id="screenTitle">BECOME THE<br><span>LIFELINE.</span></h2><p id="screenDesc">A blackout. A flooded city. Three rescue zones waiting for supplies. Your drone is the last connection. Can you finish the airlift before the storm takes over?</p><button class="actionBtn" id="mainBtn">▶ BEGIN OPERATION</button><div class="keyrow"><span><b>WASD / ↑↓←→</b> Fly</span><span><b>SPACE / E</b> Pick up &amp; drop</span><span><b>SHIFT</b> Boost</span><span><b>P</b> Pause</span></div></div></div>
+        <div class="screen" id="screen"><div class="screeninner"><div class="overline mono" id="screenTag">INCOMING DISTRESS SIGNAL</div><div class="badgeIcon" id="screenIcon">✥</div><h2 id="screenTitle">BECOME THE<br><span>LIFELINE.</span></h2><p id="screenDesc">A blackout. A flooded city. Three rescue zones waiting for supplies. Your drone is the last connection. Can you finish the airlift before the storm takes over?</p><div class="hangar" id="hangar"><div class="hangarHead"><span>◈ SELECT DRONE · HANGAR</span><small>SWITCH BEFORE EACH SECTOR</small></div><div class="droneGrid" id="droneGrid"></div><div class="hangarNote" id="hangarNote">Choose your flight profile. Every airframe flies differently.</div></div><button class="actionBtn" id="mainBtn">▶ BEGIN OPERATION</button><div class="keyrow"><span><b>WASD / ↑↓←→</b> Fly</span><span><b>SPACE / E</b> Pick up &amp; drop</span><span><b>SHIFT</b> Boost</span><span><b>P</b> Pause</span></div></div></div>
       </div>
       <div class="log"><div><span class="mono">● LIVE DISPATCH</span><div id="dispatch">Rescue Control: All units standing by for deployment.</div></div><div class="mono" style="color:#698295;font-size:10px;text-align:right">FLIGHT<br>LINK SECURE</div></div>
     </section>
     <aside class="side">
       <section class="panel"><div class="panelTitle mono"><span>01 / MISSION BRIEF</span><span style="color:var(--cyan)">● ACTIVE</span></div><h2 class="missionTitle" id="missionName">Floodline District</h2><p class="missionSub" id="missionDesc">Lift emergency supplies from the city rooftop and deliver them across the industrial ground course.</p><div class="objective"><b id="objectiveText">Locate the supply depot</b><small id="objectiveSub">Hover over the cyan rooftop pad and press SPACE to hook cargo.</small></div></section>
-      <section class="panel"><div class="panelTitle mono"><span>02 / FLIGHT TELEMETRY</span><span>DRN-07</span></div><div class="stats"><div class="stat"><label class="mono">Deliveries</label><strong id="delivered">0 / 2</strong></div><div class="stat"><label class="mono">Flight speed</label><strong id="speed">0 <span style="font-size:10px;color:#829baa">km/h</span></strong></div></div><div class="meterRow"><div class="meterHead mono"><span>Battery</span><b id="batteryText">100%</b></div><div class="track"><div class="fill" id="batteryFill"></div></div></div><div class="meterRow"><div class="meterHead mono"><span>Hull integrity</span><b id="hullText">100%</b></div><div class="track"><div class="fill goldfill" id="hullFill"></div></div></div><div class="meterRow"><div class="meterHead mono"><span>Cargo integrity</span><b id="cargoText">STANDBY</b></div><div class="track"><div class="fill" id="cargoFill" style="background:#94cfff"></div></div></div><div class="fieldguide"><span>📦 &nbsp; <b>Supply cargo</b></span><span>✚ &nbsp; <b>Rescue station</b></span><span>⚡ &nbsp; <b>Boost flight</b></span><span>✥ &nbsp; <b>Recharge depot</b></span></div></section>
+      <section class="panel"><div class="panelTitle mono"><span>02 / FLIGHT TELEMETRY</span><span id="sidebarDrone">SAT-04</span></div><div class="stats"><div class="stat"><label class="mono">Deliveries</label><strong id="delivered">0 / 2</strong></div><div class="stat"><label class="mono">Flight speed</label><strong id="speed">0 <span style="font-size:10px;color:#829baa">km/h</span></strong></div></div><div class="meterRow"><div class="meterHead mono"><span>Battery</span><b id="batteryText">100%</b></div><div class="track"><div class="fill" id="batteryFill"></div></div></div><div class="meterRow"><div class="meterHead mono"><span>Hull integrity</span><b id="hullText">100%</b></div><div class="track"><div class="fill goldfill" id="hullFill"></div></div></div><div class="meterRow"><div class="meterHead mono"><span>Cargo integrity</span><b id="cargoText">STANDBY</b></div><div class="track"><div class="fill" id="cargoFill" style="background:#94cfff"></div></div></div><div class="fieldguide"><span>📦 &nbsp; <b>Supply cargo</b></span><span>✚ &nbsp; <b>Rescue station</b></span><span>⚡ &nbsp; <b>Boost flight</b></span><span>✥ &nbsp; <b>Recharge depot</b></span></div></section>
       <section class="panel"><div class="panelTitle mono"><span>03 / RESCUE MAP</span><span>3 SECTORS</span></div><div id="missionList"></div></section>
     </aside>
   </div>
@@ -59,9 +65,9 @@ const canvas=$('game'), ctx=canvas.getContext('2d',{alpha:false});
 const WORLD_W=4580, WORLD_H=800, GROUND=741, TAU=Math.PI*2;
 const C={sky:'#224a85',cyan:'#5cf5dc',gold:'#ffc26d',red:'#ff5c65',dark:'#17283c',cream:'#fff7dd'};
 const levels=[
- {name:'Sunset Supply Run',short:'THE FIRST AIRLIFT',subtitle:'Two emergency shipments across the sunset industrial corridor.',time:190,goals:2,wind:.5,rain:0,targets:[2765,4240],cargo:'MEDICAL KIT',accent:'#5df5e0'},
- {name:'Crosswind Crossing',short:'THE MOVING MAZE',subtitle:'Rotating turbines and a moving security gate now block the flight path.',time:270,goals:3,wind:1.2,rain:0,targets:[2740,3230,4240],cargo:'POWER CELLS',accent:'#73caff'},
- {name:'Last Light Rescue',short:'THE FINAL AIRLIFT',subtitle:'Master the spinning turbines, crane hook and crosswinds before sunset.',time:300,goals:3,wind:2.0,rain:0,targets:[2765,3230,4240],cargo:'RESCUE SUPPLIES',accent:'#ffc26d'}
+ {kind:'standard',name:'Sunset Supply Run',short:'THE FIRST AIRLIFT',subtitle:'Two emergency shipments across the sunset industrial corridor.',time:190,goals:2,wind:.5,rain:0,targets:[2765,4240],cargo:'MEDICAL KIT',accent:'#5df5e0'},
+ {kind:'fragile',name:'Crosswind Crossing',short:'THE MOVING MAZE',subtitle:'Rotating turbines and a moving security gate now block the flight path.',time:270,goals:3,wind:1.2,rain:0,targets:[2740,3230,4240],cargo:'POWER CELLS',accent:'#73caff'},
+ {kind:'heavy',name:'Last Light Rescue',short:'THE FINAL AIRLIFT',subtitle:'Master the spinning turbines, crane hook and crosswinds before sunset.',time:300,goals:3,wind:2.0,rain:0,targets:[2765,3230,4240],cargo:'RESCUE SUPPLIES',accent:'#ffc26d'}
 ];
 const depot={x:412,y:419,padY:495};
 const structures=[
@@ -84,8 +90,23 @@ const structures=[
 ];
 // All visible solid structures contribute their actual collision rectangles.
 const fixedSolids=structures.map(s=>({x:s.x,y:s.y,w:s.w,h:s.h,type:s.type}));
-fixedSolids.push({x:0,y:GROUND,w:WORLD_W,h:WORLD_H-GROUND,type:'ground'});
-const state={mode:'title',lv:0,score:0,delivered:0,carrying:false,time:190,battery:100,hull:100,cargo:100,x:412,y:410,vx:0,vy:0,cx:412,cy:468,cvx:0,cvy:0,angle:0,elapsed:0,boost:false,camX:0,shake:0,flash:0,hitCooldown:0,particles:[],popups:[],sound:true,completed:false};
+// Ground has a separate one-way landing solver: upward thrust is never blocked by a floor box.
+fixedSolids.push({x:3415,y:407,w:10,h:GROUND-407,type:'gateRail'},
+ {x:3570,y:407,w:10,h:GROUND-407,type:'gateRail'},
+ {x:3411,y:400,w:178,h:13,type:'gateHeader'},
+ {x:3770,y:239,w:220,h:18,type:'craneBeam'});
+const DRONES=[
+ {id:'scout',name:'AERO-SCOUT',short:'SCOUT',role:'LIGHT & FAST',capacity:1,speed:390,accel:1100,hull:85,battery:92,stability:3.5,halfW:68,halfH:31,boost:1.4,color:'#66ffe1',glyph:'✧'},
+ {id:'industrial',name:'SAT-04 INDUSTRIAL',short:'SAT-04',role:'BALANCED · AUTO-HOVER',capacity:2,speed:315,accel:870,hull:120,battery:115,stability:4.7,halfW:80,halfH:35,boost:1.32,color:'#ffd075',glyph:'✥'},
+ {id:'titan',name:'TITAN HEAVY-LIFTER',short:'TITAN',role:'ARMORED · MAX CARGO',capacity:3,speed:250,accel:710,hull:170,battery:145,stability:3.3,halfW:88,halfH:39,boost:1.27,color:'#ff917a',glyph:'⬡'}
+];
+const drone=()=>DRONES.find(d=>d.id===state.droneId)||DRONES[1];
+function slotCost(){return level().kind==='heavy'&&state.droneId==='industrial'?2:1}
+function slotsUsed(){return state.load.reduce((v)=>v+slotCost(),0)}
+function canPick(){return slotsUsed()+slotCost()<=drone().capacity && state.delivered+state.load.length<level().goals}
+function syncCargo(){state.carrying=state.load.length>0;state.cargo=state.carrying?Math.min(...state.load.map(c=>c.integrity)):100;if(state.carrying){state.cx=state.load[0].x;state.cy=state.load[0].y;state.cvx=state.load[0].vx;state.cvy=state.load[0].vy}}
+function renderHangar(){ $('droneGrid').innerHTML=DRONES.map(d=>`<button class="dronePick ${state.droneId===d.id?'selected':''}" data-drone="${d.id}" aria-pressed="${state.droneId===d.id}"><span class="vehicleGlyph" style="color:${d.color}">${d.glyph} 🚁</span><b>${d.name}</b><span class="role">${d.role} · ${d.capacity} CRATE${d.capacity>1?'S':''}</span>${[['CAPACITY',d.capacity/3*100],['SPEED',d.speed/390*100],['HULL',d.hull/170*100]].map(([n,v])=>`<div class="hangarStat"><span>${n}</span><div class="sbar"><i style="width:${v}%"></i></div></div>`).join('')}</button>`).join('');document.querySelectorAll('[data-drone]').forEach(btn=>btn.addEventListener('click',()=>{if(state.mode!=='title'&&state.mode!=='clear')return;state.droneId=btn.dataset.drone;renderHangar();updateUI();sfx('pick')}));$('hangarNote').textContent=state.droneId==='scout'?'Scout: fastest handling, but HEAVY GOLD reduces speed.':state.droneId==='industrial'?'SAT-04: steadier hover; two standard crates or one heavy shipment.':'Titan: three-crate magnetic array, heavy hauling with no speed penalty.'}
+const state={mode:'title',droneId:'industrial',load:[],lv:0,score:0,delivered:0,carrying:false,time:190,battery:115,hull:120,cargo:100,x:412,y:410,vx:0,vy:0,cx:412,cy:468,cvx:0,cvy:0,angle:0,elapsed:0,boost:false,camX:0,shake:0,flash:0,hitCooldown:0,particles:[],popups:[],sound:true,completed:false};
 const keys=new Set(),touchKeys=new Set();let vw=0,vh=0,dpr=1,scale=1,viewW=1120,viewH=710,last=performance.now(),audio=null,toastTimer=null;
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 function random(seed){let a=Math.sin(seed*127.1+41.3)*43758.5453;return a-Math.floor(a)}
@@ -96,11 +117,11 @@ function sfx(name){if(name==='pick'){sound(610,.1);sound(940,.2,'sine',.04,.08)}
 function notify(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),1700)}
 function dispatch(message){$('dispatch').textContent='Rescue Control: '+message}
 const level=()=>levels[state.lv];
-function setScreen(tag,icon,title,desc,button){$('screenTag').textContent=tag;$('screenIcon').textContent=icon;$('screenTitle').innerHTML=title;$('screenDesc').textContent=desc;$('mainBtn').textContent=button;$('screen').classList.remove('hidden')}
+function setScreen(tag,icon,title,desc,button){$('hangar').classList.toggle('hidden',!(state.mode==='title'||state.mode==='clear'));if(state.mode==='title'||state.mode==='clear')renderHangar();$('screenTag').textContent=tag;$('screenIcon').textContent=icon;$('screenTitle').innerHTML=title;$('screenDesc').textContent=desc;$('mainBtn').textContent=button;$('screen').classList.remove('hidden')}
 function hideScreen(){$('screen').classList.add('hidden')}
-function startMission(){const l=level();Object.assign(state,{mode:'playing',x:depot.x,y:depot.y-4,vx:0,vy:0,cx:depot.x,cy:depot.y+55,cvx:0,cvy:0,angle:0,battery:100,hull:100,cargo:100,time:l.time,delivered:0,carrying:false,elapsed:0,shake:0,flash:0,hitCooldown:0,particles:[],popups:[],camX:depot.x});hideScreen();dispatch(`Sector ${state.lv+1}: collect the cyan rooftop cargo, then fly east.`);notify(`SECTOR ${String(state.lv+1).padStart(2,'0')} · ${l.short}`);updateUI();sfx('start')}
-function showTitle(){Object.assign(state,{mode:'title',lv:0,score:0,delivered:0,carrying:false,x:depot.x,y:depot.y-4,camX:depot.x,cx:depot.x,cy:depot.y+55,elapsed:0});setScreen('TEAM PIRATES · SATURNALIA 2026','✥','SKYLINE <span>AIRLIFT.</span>','A sunset rescue run. Lift supplies from the city rooftop, weave through walls, towers and moving machines, then land at distant rescue pads. Three sectors. One final airlift.','▶ BEGIN OPERATION');dispatch('All flight systems online. Awaiting clearance.');updateUI()}
-function clearMission(){state.mode='clear';const bonus=Math.round(state.time*9+state.hull*7+state.cargo*6+state.battery*3);state.score+=bonus;sfx('drop');setScreen(`SECTOR ${state.lv+1} SECURED`,'✓','AIRLIFT <span>COMPLETE.</span>',`Every delivery arrived. +${bonus.toLocaleString()} sector bonus. Hull ${Math.round(state.hull)}%, cargo integrity ${Math.round(state.cargo)}%. ${state.lv<2?'New moving obstacles have been activated.':'All rescue stations are supplied.'}`,state.lv<2?'▶ NEXT SECTOR':'★ FINAL REPORT');updateUI()}
+function startMission(){const l=level();Object.assign(state,{mode:'playing',x:depot.x,y:depot.y-4,vx:0,vy:0,cx:depot.x,cy:depot.y+55,cvx:0,cvy:0,load:[],angle:0,battery:drone().battery,hull:drone().hull,cargo:100,time:l.time,delivered:0,carrying:false,elapsed:0,shake:0,flash:0,hitCooldown:0,particles:[],popups:[],camX:depot.x});hideScreen();dispatch(`Sector ${state.lv+1}: collect the cyan rooftop cargo, then fly east.`);notify(`SECTOR ${String(state.lv+1).padStart(2,'0')} · ${l.short}`);updateUI();sfx('start')}
+function showTitle(){Object.assign(state,{mode:'title',lv:0,score:0,delivered:0,carrying:false,load:[],x:depot.x,y:depot.y-4,camX:depot.x,cx:depot.x,cy:depot.y+55,elapsed:0});setScreen('TEAM PIRATES · SATURNALIA 2026','✥','SKYLINE <span>AIRLIFT.</span>','A sunset rescue run. Lift supplies from the city rooftop, weave through walls, towers and moving machines, then land at distant rescue pads. Three sectors. One final airlift.','▶ BEGIN OPERATION');dispatch('All flight systems online. Awaiting clearance.');updateUI()}
+function clearMission(){state.mode='clear';const bonus=Math.round(state.time*9+state.hull*7+state.cargo*6+state.battery*3);state.score+=bonus;sfx('drop');setScreen(`SECTOR ${state.lv+1} SECURED`,'✓','AIRLIFT <span>COMPLETE.</span>',`Every delivery arrived. +${bonus.toLocaleString()} sector bonus. Hull ${Math.round(state.hull/drone().hull*100)}%, cargo integrity ${Math.round(state.cargo)}%. ${state.lv<2?'New moving obstacles have been activated.':'All rescue stations are supplied.'}`,state.lv<2?'▶ NEXT SECTOR':'★ FINAL REPORT');updateUI()}
 function winGame(){state.mode='victory';let best=0;try{best=Number(localStorage.getItem('skyline-airlift-best')||0);if(state.score>best)localStorage.setItem('skyline-airlift-best',String(state.score))}catch(e){}setScreen('ALL RESCUE STATIONS SUPPLIED','🏆','CITY <span>SAVED.</span>',`Final score ${state.score.toLocaleString()} points. ${state.score>best?'NEW HIGH SCORE!':'Best score '+best.toLocaleString()+'.'} Three successful sunset operations. Team Pirates, mission accomplished!`,'↻ PLAY AGAIN');dispatch('All rescue stations secured. Spectacular flying!');updateUI();sfx('drop')}
 function fail(reason){if(state.mode!=='playing')return;state.mode='fail';sfx('fail');dispatch(reason);setScreen('EMERGENCY LANDING','⚠','FLIGHT <span>FAILED.</span>',reason+' The rescue mission can be retried from the beginning of this sector.','↻ RETRY SECTOR');updateUI()}
 function pause(){if(state.mode==='playing'){state.mode='paused';setScreen('FLIGHT HOLD','Ⅱ','OPERATION <span>PAUSED.</span>','Time is stopped. Resume whenever you are ready.','▶ RESUME FLIGHT')}else if(state.mode==='paused'){state.mode='playing';hideScreen();last=performance.now()}}
@@ -108,7 +129,25 @@ $('mainBtn').addEventListener('click',()=>{if(state.mode==='title'||state.mode==
 $('pauseBtn').addEventListener('click',pause);$('soundBtn').addEventListener('click',()=>{state.sound=!state.sound;$('soundBtn').textContent=state.sound?'♫ SOUND ON':'♫ SOUND OFF';if(state.sound)sfx('start')});
 const dist=(x,y,a,b)=>Math.hypot(x-a,y-b);
 function target(){return {x:level().targets[Math.min(state.delivered,level().goals-1)],y:648}}
-function interact(){if(state.mode!=='playing')return;if(!state.carrying){if(dist(state.x,state.y,depot.x,depot.y)<105){state.carrying=true;state.cargo=100;state.cx=state.x;state.cy=state.y+54;state.cvx=state.vx*.2;state.cvy=0;sfx('pick');emit(state.x,state.y,22,C.cyan);notify('◆ CARGO HOOKED · FLY EAST');dispatch('Cargo secured. Follow the amber navigation beacon to the rescue pad.');popup(state.x,state.y-35,'PACKAGE SECURED',C.cyan)}else{notify('FLY TO THE CYAN ROOFTOP PICKUP PAD');sfx('hit')}}else{const t=target();if(dist(state.x,state.y,t.x,t.y)<110){const gain=1300+Math.floor(state.time*2)+Math.floor(state.cargo*5);state.score+=gain;state.delivered++;state.carrying=false;state.battery=clamp(state.battery+17,0,100);sfx('drop');emit(state.x,state.y,50,'#ffe1a0');state.flash=.1;notify(`✓ DELIVERY ${state.delivered}/${level().goals} · +${gain} PTS`);dispatch(`Delivery confirmed. ${state.delivered<level().goals?'Return to the city rooftop for the next cargo.':'All rescue pads supplied!'}`);popup(state.x,state.y-60,'DELIVERY COMPLETE','#fff2a2');if(state.delivered>=level().goals){clearMission();return}}else{notify('DESCEND TO THE GOLDEN RESCUE PAD');sfx('hit')}}updateUI()}
+function interact(){
+ if(state.mode!=='playing')return;
+ const t=target(),atDepot=dist(state.x,state.y,depot.x,depot.y)<112,atDrop=dist(state.x,state.y,t.x,t.y)<112;
+ if(state.load.length && atDrop){
+  const deliveredCrate=state.load.shift(),gain=1300+Math.floor(state.time*2)+Math.floor(deliveredCrate.integrity*5);
+  state.score+=gain;state.delivered++;syncCargo();state.battery=clamp(state.battery+17,0,drone().battery);sfx('drop');emit(state.x,state.y,45,'#ffe1a0');state.flash=.08;
+  notify(`✓ DELIVERY ${state.delivered}/${level().goals} · +${gain} PTS`);
+  popup(state.x,state.y-60,'DELIVERY COMPLETE','#fff2a2');
+  dispatch(`${state.delivered<level().goals?'Cargo delivered. '+(state.carrying?'Additional cargo aboard — fly to the next golden pad.':'Return to the rooftop for more cargo.'):'All rescue pads supplied!'}`);
+  if(state.delivered>=level().goals){clearMission();return}
+ }else if(atDepot && canPick()){
+  const idx=state.load.length,n=drone().capacity,cargo={x:state.x+(idx-(n-1)/2)*48,y:state.y+57,vx:state.vx*.2,vy:0,integrity:100,type:level().kind};
+  state.load.push(cargo);syncCargo();sfx('pick');emit(state.x,state.y,15,C.cyan);notify(`◆ ${level().kind==='heavy'?'HEAVY GOLD':'SUPPLY'} HOOKED · LOAD ${state.load.length}/${drone().capacity}`);
+  popup(state.x,state.y-35,'PACKAGE SECURED',C.cyan);dispatch(`${state.load.length} crate(s) magnetically secured. ${canPick()?'Press SPACE again to collect another, or depart.':'Cargo bay full — follow the amber route.'}`);
+ }else if(atDepot && !canPick())notify(state.load.length?'CARGO BAY FULL · FLY EAST':'ALL CARGO ACCOUNTED FOR');
+ else if(!state.load.length)notify('FLY TO THE CYAN ROOFTOP PICKUP PAD');
+ else notify('DESCEND TO THE NEXT GOLDEN RESCUE PAD');
+ updateUI()
+}
 const ctrlMap={w:'up',arrowup:'up',s:'down',arrowdown:'down',a:'left',arrowleft:'left',d:'right',arrowright:'right',shift:'boost'};
 window.addEventListener('keydown',e=>{let k=e.key.toLowerCase();if(k in ctrlMap||[' ','e','p','escape'].includes(k))e.preventDefault();if(!e.repeat){if(k===' '||k==='e')interact();if(k==='p'||k==='escape')pause()}keys.add(k)});
 window.addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));window.addEventListener('blur',()=>{keys.clear();touchKeys.clear();if(state.mode==='playing')pause()});
@@ -116,42 +155,172 @@ for(const el of document.querySelectorAll('[data-control]')){const k=el.dataset.
 const held=ctrl=>touchKeys.has(ctrl)||[...keys].some(k=>ctrlMap[k]===ctrl);
 function emit(x,y,count,color){for(let i=0;i<count;i++){let a=Math.random()*TAU,s=25+Math.random()*140;state.particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.35+Math.random()*.65,size:1+Math.random()*3,color})}if(state.particles.length>220)state.particles.splice(0,state.particles.length-220)}
 function popup(x,y,t,color){state.popups.push({x,y,text:t,color,life:1.35})}
-function damage(kind,speed,x,y){if(state.hitCooldown>0)return;let amount=clamp(Math.round(speed*.048),4,18);if(kind==='cargo'){state.cargo=Math.max(0,state.cargo-amount);notify(`⚠ PACKAGE IMPACT · -${amount}% CARGO`)}else{state.hull=Math.max(0,state.hull-amount);if(state.carrying)state.cargo=Math.max(0,state.cargo-Math.round(amount*.4));notify(`⚠ HULL IMPACT · -${amount}%`)}state.hitCooldown=.3;state.shake=.24;state.flash=.12;emit(x,y,17,'#ffd26e');emit(x,y,8,'#ff646a');sfx('hit')}
-// Circle-vs-solid collision; resolves penetration and removes inward velocity.
-function resolveRect(body,r,b,kind,motionImpact=0){let xx=clamp(body.x,b.x,b.x+b.w),yy=clamp(body.y,b.y,b.y+b.h),dx=body.x-xx,dy=body.y-yy,ds=dx*dx+dy*dy;
- if(ds>=r*r)return false;let nx=0,ny=0,penetration=0;
- if(ds>1e-7){let dd=Math.sqrt(ds);nx=dx/dd;ny=dy/dd;penetration=r-dd}
- else{let dl=Math.abs(body.x-b.x),dr=Math.abs(b.x+b.w-body.x),dt=Math.abs(body.y-b.y),db=Math.abs(b.y+b.h-body.y),v=Math.min(dl,dr,dt,db);if(v===dl){nx=-1;penetration=dl+r}else if(v===dr){nx=1;penetration=dr+r}else if(v===dt){ny=-1;penetration=dt+r}else{ny=1;penetration=db+r}}
- body.x+=nx*(penetration+.04);body.y+=ny*(penetration+.04);let incoming=-(body.vx*nx+body.vy*ny);if(incoming>0||motionImpact>60){if(Math.max(incoming,motionImpact)>48&&state.mode==='playing')damage(kind,Math.max(incoming,motionImpact),body.x-nx*r,body.y-ny*r);if(incoming>0){body.vx-=nx*incoming*1.18;body.vy-=ny*incoming*1.18;body.vx*=.88;body.vy*=.88}}return true}
-function resolveCircle(body,r,x,y,rr,kind,motionImpact=0){const dx=body.x-x,dy=body.y-y,d=Math.hypot(dx,dy);if(d>=r+rr)return false;const nx=d>0?dx/d:1,ny=d>0?dy/d:0;body.x+=nx*(r+rr-d+.05);body.y+=ny*(r+rr-d+.05);const impact=-(body.vx*nx+body.vy*ny);if(impact>0||motionImpact>60){if(Math.max(impact,motionImpact)>48)damage(kind,Math.max(impact,motionImpact),body.x,body.y);if(impact>0){body.vx-=nx*impact*1.2;body.vy-=ny*impact*1.2}}return true}
-function resolveCapsule(body,r,x1,y1,x2,y2,thickness,kind,motionImpact=0){const dx=x2-x1,dy=y2-y1,u=clamp(((body.x-x1)*dx+(body.y-y1)*dy)/(dx*dx+dy*dy||1),0,1);return resolveCircle(body,r,x1+dx*u,y1+dy*u,thickness,kind,motionImpact)}
-function movingSolids(t){const arr=[];if(state.lv>=1){const y=480+(Math.sin(t*1.48)+1)*61;arr.push({x:3420,y,w:160,h:30,type:'movingGate',motionImpact:Math.abs(Math.cos(t*1.48)*90)});}return arr}
-function hitMoving(body,r,kind){{let tx=3082,ty=510,spin=state.lv>=1?state.elapsed*(state.lv===2?1.9:1.25):-.25;for(let j=0;j<3;j++){const a=spin+j*TAU/3;resolveCapsule(body,r,tx+Math.cos(a)*14,ty+Math.sin(a)*14,tx+Math.cos(a)*105,ty+Math.sin(a)*105,11,kind,state.lv>=1?110:0)}resolveCircle(body,r,tx,ty,17,kind)}{const a=state.lv>=2?state.elapsed*1.23:0;resolveCircle(body,r,3890+Math.sin(a)*142,449+Math.cos(a)*64,20,kind,state.lv>=2?135:0)}}
-function solidStep(body,r,kind){for(const b of fixedSolids)resolveRect(body,r,b,kind);for(const b of movingSolids(state.elapsed))resolveRect(body,r,b,kind,b.motionImpact||0);if(state.lv===0)resolveRect(body,r,{x:3420,y:512,w:160,h:30,type:'fixedGate'},kind);hitMoving(body,r,kind);if(body.x<r){body.x=r;body.vx=Math.max(0,body.vx)}if(body.x>WORLD_W-r){body.x=WORLD_W-r;body.vx=Math.min(0,body.vx)}if(body.y<45+r){body.y=45+r;body.vy=Math.max(0,body.vy)}}
-function solidDroneStep(body){
- // Side-profile rotor guards are solid too: the visual drone is wider than its fuselage.
- solidStep(body,25,'hull');
- for(const offset of [-46,46]){
-   const rx=body.x+offset,ry=body.y-20,rotor={x:rx,y:ry,vx:body.vx,vy:body.vy};
-   solidStep(rotor,29,'hull');
-   body.x+=rotor.x-rx;body.y+=rotor.y-ry;body.vx=rotor.vx;body.vy=rotor.vy;
+function damage(kind,speed,x,y,cargoRef=null){
+ if(state.hitCooldown>0||state.mode!=='playing')return;
+ let amount=clamp(Math.round(speed*.055),4,19);
+ if(kind==='cargo' && state.load.length){const c=cargoRef||state.load[0];c.integrity=Math.max(0,c.integrity-amount);syncCargo();notify(`⚠ CARGO IMPACT · -${amount}%`)}
+ else {state.hull=Math.max(0,state.hull-amount);if(state.load.length){for(const c of state.load)c.integrity=Math.max(0,c.integrity-Math.round(amount*.24));syncCargo()}notify(`⚠ HULL IMPACT · -${amount}%`)}
+ state.hitCooldown=.2;state.shake=.21;state.flash=.10;emit(x,y,15,'#ffd26e');emit(x,y,8,'#ff646a');sfx('hit')
+}
+// AABB MTV picks the axis with least penetration. Bounces only on the inward axis;
+// impact cooldown is damage-only, never used to disable thrust or physics.
+function bounceAxis(body,nx,ny,speed,kind,cargoRef=null){
+ const relative=(body.vx-(speed.vx||0))*nx+(body.vy-(speed.vy||0))*ny;
+ if(relative<0){const intensity=-relative;if(intensity>50)damage(kind,intensity+Math.abs(speed.motionImpact||0),body.x,body.y,cargoRef);
+  if(nx)body.vx=(speed.vx||0)+nx*intensity*.45;
+  if(ny)body.vy=(speed.vy||0)+ny*intensity*.45;
  }
 }
-function update(dt){if(state.mode!=='playing'){state.elapsed+=dt*.23;state.shake=Math.max(0,state.shake-dt);return}const l=level();state.elapsed+=dt;state.time=Math.max(0,state.time-dt);state.hitCooldown=Math.max(0,state.hitCooldown-dt);state.shake=Math.max(0,state.shake-dt);state.flash=Math.max(0,state.flash-dt);if(state.time<=0){fail('The mission clock reached zero.');return}
- const ix=(held('right')?1:0)-(held('left')?1:0),iy=(held('down')?1:0)-(held('up')?1:0),ln=Math.hypot(ix,iy)||1;state.boost=held('boost')&&state.battery>8;const accel=state.boost?1140:880,max=state.boost?415:305;const wind=Math.sin(state.elapsed*.71)*l.wind*16;state.vx+=(ix/ln*accel+wind-state.vx*(ix||iy?2.7:4.3))*dt;state.vy+=(iy/ln*accel+Math.cos(state.elapsed*.55)*l.wind*7-state.vy*(ix||iy?2.7:4.3))*dt;const sp=Math.hypot(state.vx,state.vy);if(sp>max){state.vx=state.vx*max/sp;state.vy=state.vy*max/sp}let desired=clamp(-state.vx*.00038-state.vy*.00015,-.18,.18);state.angle+=(desired-state.angle)*Math.min(1,dt*5);
- // Substeps stop fast-moving drone and its crate tunnelling through thin barriers.
- const steps=Math.max(1,Math.ceil(dt/.012)),h=dt/steps;
- for(let k=0;k<steps;k++){
-  let drone={x:state.x+state.vx*h,y:state.y+state.vy*h,vx:state.vx,vy:state.vy};solidDroneStep(drone);state.x=drone.x;state.y=drone.y;state.vx=drone.vx;state.vy=drone.vy;
-  if(state.carrying){const bx=state.x-clamp(state.vx*.13,-47,47),by=state.y+55+clamp(state.vy*.028,-8,12);state.cvx+=(bx-state.cx)*29*h-state.cvx*7.5*h;state.cvy+=(by-state.cy)*33*h-state.cvy*8*h;const crate={x:state.cx+state.cvx*h,y:state.cy+state.cvy*h,vx:state.cvx,vy:state.cvy};solidStep(crate,23,'cargo');state.cx=crate.x;state.cy=crate.y;state.cvx=crate.vx;state.cvy=crate.vy;const length=dist(state.cx,state.cy,state.x,state.y);if(length>86){const pull=(length-86)/length;state.cx-=(state.cx-state.x)*pull*.72;state.cy-=(state.cy-state.y)*pull*.72;let hold={x:state.cx,y:state.cy,vx:state.cvx,vy:state.cvy};solidStep(hold,23,'cargo');state.cx=hold.x;state.cy=hold.y;}}
+function resolveAABB(body,hw,hh,b,kind,cargoRef=null){
+ const bx=b.x+b.w/2,by=b.y+b.h/2;
+ const px=hw+b.w/2-Math.abs(body.x-bx),py=hh+b.h/2-Math.abs(body.y-by);
+ if(px<=0||py<=0)return false;
+ if(px<py){const nx=body.x<bx?-1:1;body.x+=nx*(px+.2);bounceAxis(body,nx,0,b,kind,cargoRef)}
+ else{const ny=body.y<by?-1:1;body.y+=ny*(py+.2);bounceAxis(body,0,ny,b,kind,cargoRef)}
+ return true
+}
+function resolveRect(body,r,b,kind,cargoRef=null){
+ // Circle vs AABB closest point. When center is embedded, use least-penetration face.
+ const xx=clamp(body.x,b.x,b.x+b.w),yy=clamp(body.y,b.y,b.y+b.h),dx=body.x-xx,dy=body.y-yy,ds=dx*dx+dy*dy;
+ if(ds>=r*r)return false;
+ let nx=0,ny=0,p;
+ if(ds>1e-8){const d=Math.sqrt(ds);nx=dx/d;ny=dy/d;p=r-d}
+ else{const opts=[{d:body.x-b.x,nx:-1,ny:0},{d:b.x+b.w-body.x,nx:1,ny:0},{d:body.y-b.y,nx:0,ny:-1},{d:b.y+b.h-body.y,nx:0,ny:1}];const hit=opts.reduce((a,v)=>v.d<a.d?v:a);nx=hit.nx;ny=hit.ny;p=hit.d+r}
+ body.x+=nx*(p+.2);body.y+=ny*(p+.2);bounceAxis(body,nx,ny,b,kind,cargoRef);return true
+}
+function resolveCircle(body,r,x,y,rr,kind,motion=null,cargoRef=null){
+ const dx=body.x-x,dy=body.y-y,d=Math.hypot(dx,dy);
+ if(d>=r+rr)return false;
+ const nx=d>1e-6?dx/d:1,ny=d>1e-6?dy/d:0;
+ body.x+=nx*(r+rr-d+.2);body.y+=ny*(r+rr-d+.2);
+ bounceAxis(body,nx,ny,motion||{},kind,cargoRef);return true
+}
+function resolveCapsule(body,r,x1,y1,x2,y2,thickness,kind,motion=null,cargoRef=null){
+ const dx=x2-x1,dy=y2-y1,u=clamp(((body.x-x1)*dx+(body.y-y1)*dy)/(dx*dx+dy*dy||1),0,1);
+ return resolveCircle(body,r,x1+dx*u,y1+dy*u,thickness,kind,motion,cargoRef)
+}
+function movingSolids(t){
+ const y=state.lv>=1?480+(Math.sin(t*1.48)+1)*61:512;
+ return [{x:3420,y,w:160,h:30,type:'movingGate',vx:0,vy:state.lv>=1?Math.cos(t*1.48)*90.28:0,motionImpact:state.lv>=1?90:0}]
+}
+function movingCircles(t){const hot=state.lv>=2;return hot?[{x:3675+Math.sin(t*1.31)*147,y:305+Math.cos(t*.72)*52,r:29,vx:Math.cos(t*1.31)*192,vy:-Math.sin(t*.72)*38}]:[]}
+function dynamicStep(body,r,kind,cargoRef=null){
+ const t=state.elapsed,tx=3082,ty=510,hot=state.lv>=2;
+ const spin=state.lv>=1?t*(hot?1.9:1.25):-.25;
+ for(let j=0;j<3;j++){const a=spin+j*TAU/3;resolveCapsule(body,r,tx+Math.cos(a)*14,ty+Math.sin(a)*14,tx+Math.cos(a)*105,ty+Math.sin(a)*105,11,kind,{motionImpact:state.lv>=1?115:0},cargoRef)}
+ resolveCircle(body,r,tx,ty,17,kind,null,cargoRef);
+ const angle=hot?t*1.23:0;
+ resolveCircle(body,r,3890+Math.sin(angle)*142,449+Math.cos(angle)*64,20,kind,{vx:hot?Math.cos(angle)*175:0,vy:hot?-Math.sin(angle)*79:0,motionImpact:hot?100:0},cargoRef);
+ for(const c of movingCircles(t))resolveCircle(body,r,c.x,c.y,c.r,kind,c,cargoRef)
+}
+function droneGround(body){const floor=GROUND-drone().halfH-6;if(body.y>floor){body.y=floor;if(body.vy>0)body.vy=0}}
+function cargoGround(body,r){const floor=GROUND-r-3;if(body.y>floor){body.y=floor;if(body.vy>0)body.vy=-body.vy*.20}}
+function solidStep(body,r,kind,cargoRef=null){
+ for(let pass=0;pass<3;pass++){
+  let overlap=false;
+  for(const b of fixedSolids)overlap=resolveRect(body,r,b,kind,cargoRef)||overlap;
+  for(const b of movingSolids(state.elapsed))overlap=resolveRect(body,r,b,kind,cargoRef)||overlap;
+  if(!overlap)break;
  }
- state.battery=Math.max(0,state.battery-dt*(.37+(state.boost?1.9:0)+(state.carrying?.19:0)));if(!state.carrying&&dist(state.x,state.y,depot.x,depot.y)<115)state.battery=Math.min(100,state.battery+dt*12);
- if(state.battery<=0){fail('Battery drained. Recharge near the cyan rooftop pad between deliveries.');return}if(state.hull<=0){fail('Hull integrity depleted after collisions.');return}if(state.cargo<=0){fail('The delivery cargo was damaged beyond repair.');return}
- if(Math.random()<dt*(state.boost?28:10))emit(state.x-22,state.y+9,1,state.boost?'#ffde93':'#a2f7ea');for(const p of state.particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.984;p.vy*=.984;p.life-=dt}state.particles=state.particles.filter(p=>p.life>0);for(const p of state.popups){p.y-=22*dt;p.life-=dt}state.popups=state.popups.filter(p=>p.life>0);updateUI()}
-function updateUI(){const l=level(),t=state.carrying?target():depot,near=dist(state.x,state.y,t.x,t.y)<(state.carrying?110:105),percent=clamp(state.x/WORLD_W*100,0,100);$('hudTime').textContent=`${String(Math.floor(Math.max(0,state.time)/60)).padStart(2,'0')}:${String(Math.floor(Math.max(0,state.time)%60)).padStart(2,'0')}`;$('hudTime').style.color=state.time<30?'#ff7b82':'#f5fcff';$('hudScore').textContent=String(state.score).padStart(5,'0');$('missionName').textContent=l.name;$('missionDesc').textContent=l.subtitle;$('delivered').textContent=`${state.delivered} / ${l.goals}`;$('speed').innerHTML=`${Math.round(Math.hypot(state.vx,state.vy)*.22)} <span style="font-size:10px;color:#829baa">km/h</span>`;$('batteryText').textContent=Math.ceil(state.battery)+'%';$('hullText').textContent=Math.ceil(state.hull)+'%';$('cargoText').textContent=state.carrying?Math.ceil(state.cargo)+'%':'STANDBY';$('batteryFill').style.width=state.battery+'%';$('hullFill').style.width=state.hull+'%';$('cargoFill').style.width=(state.carrying?state.cargo:100)+'%';$('batteryFill').style.background=state.battery<25?'#ff6b68':'var(--cyan)';$('hullFill').style.background=state.hull<30?'#ff6b68':'var(--gold)';$('cargoFill').style.background=state.cargo<30?'#ff6b68':'#94cfff';$('progressFill').style.width=percent+'%';$('progressMarker').style.left=percent+'%';$('progressText').textContent=`${Math.floor(percent)}% OF ROUTE`;
- $('objectiveText').textContent=state.carrying?`DELIVER PACKAGE ${state.delivered+1}`:'PICK UP CITY ROOFTOP SUPPLIES';$('objectiveSub').textContent=state.carrying?'Fly east, dodge the orange-and-black hazards, and descend to the glowing rescue pad.':'Return west to the cyan rooftop platform, then press SPACE / E to hook the crate.';
- $('prompt').innerHTML=state.mode==='playing'?(near?(state.carrying?'<strong>DELIVERY PAD IN RANGE</strong> <span class="key">SPACE</span> DROP CARGO':'<strong>CITY PICKUP IN RANGE</strong> <span class="key">SPACE</span> HOOK PACKAGE'):state.carrying?`→ HEAD EAST TO <strong>RESCUE PAD</strong> · ${Math.round(dist(state.x,state.y,t.x,t.y))} m`:`← BACK TO <strong>CITY ROOFTOP</strong> · ${Math.round(dist(state.x,state.y,t.x,t.y))} m`):'MISSION CONTROL // STANDBY';
- $('missionList').innerHTML=levels.map((v,i)=>`<div class="missionrow"><div class="node ${i<state.lv?'done':i===state.lv?'on':''}">${i<state.lv?'✓':String(i+1).padStart(2,'0')}</div><div><b>${v.name}</b><small>${i<state.lv?'SECTOR SECURED':i===state.lv?'FLIGHT ASSIGNMENT':'AWAITING AUTHORIZATION'}</small></div></div>`).join('')}
+ dynamicStep(body,r,kind,cargoRef);
+ body.x=clamp(body.x,r+.2,WORLD_W-r-.2);
+ if(body.x<=r+.2&&body.vx<0)body.vx=0;
+ if(body.x>=WORLD_W-r-.2&&body.vx>0)body.vx=0;
+ if(body.y<45+r){body.y=45+r;if(body.vy<0)body.vy=0}
+ cargoGround(body,r)
+}
+function solidDroneStep(body){
+ const d=drone();
+ // AABB provides consistent face-based MTV response with no rotor-vs-fuselage ping-pong.
+ for(let pass=0;pass<4;pass++){
+  let overlap=false;
+  for(const b of fixedSolids)overlap=resolveAABB(body,d.halfW,d.halfH,b,'hull')||overlap;
+  for(const b of movingSolids(state.elapsed))overlap=resolveAABB(body,d.halfW,d.halfH,b,'hull')||overlap;
+  if(!overlap)break
+ }
+ // Dynamic blades/hooks are capsule/circle hazards; same outward MTV and .45 restitution.
+ dynamicStep(body,38,'hull');
+ const xmin=d.halfW+2,xmax=WORLD_W-d.halfW-2;
+ body.x=clamp(body.x,xmin,xmax);
+ if(body.x===xmin&&body.vx<0)body.vx=0;
+ if(body.x===xmax&&body.vx>0)body.vx=0;
+ const ceiling=45+d.halfH;if(body.y<ceiling){body.y=ceiling;if(body.vy<0)body.vy=0}
+ // Key ground fix: no floor solid to trap the drone, no control disabling on landing.
+ droneGround(body)
+}
+function update(dt){
+ if(state.mode!=='playing'){state.elapsed+=dt*.23;state.shake=Math.max(0,state.shake-dt);return}
+ const l=level(),d=drone();state.elapsed+=dt;state.time=Math.max(0,state.time-dt);
+ state.hitCooldown=Math.max(0,state.hitCooldown-dt);state.shake=Math.max(0,state.shake-dt);state.flash=Math.max(0,state.flash-dt);
+ if(state.time<=0){fail('The mission clock reached zero.');return}
+ const ix=(held('right')?1:0)-(held('left')?1:0),iy=(held('down')?1:0)-(held('up')?1:0),ln=Math.hypot(ix,iy)||1;
+ state.boost=held('boost')&&state.battery>8;
+ const weightPenalty=l.kind==='heavy'&&d.id==='scout'&&state.load.length?.56:1;
+ const accel=d.accel*(state.boost?1.25:1)*weightPenalty,max=d.speed*(state.boost?d.boost:1)*weightPenalty;
+ const wind=Math.sin(state.elapsed*.71)*l.wind*16;
+ // Explicit thrust always works after landing; lateral controls work on the floor.
+ const drag=ix||iy?d.stability*.57:d.stability;
+ state.vx+=(ix/ln*accel+wind-state.vx*drag)*dt;
+ state.vy+=(iy/ln*accel+Math.cos(state.elapsed*.55)*l.wind*7-state.vy*drag)*dt;
+ const sp=Math.hypot(state.vx,state.vy);if(sp>max){state.vx*=max/sp;state.vy*=max/sp}
+ let desired=clamp(-state.vx*.00038-state.vy*.00015,-.18,.18);state.angle+=(desired-state.angle)*Math.min(1,dt*5);
+ // Fixed sub-steps prevent thin-wall tunneling and resolve each crate independently.
+ const steps=Math.max(1,Math.ceil(dt/.009)),h=dt/steps;
+ for(let k=0;k<steps;k++){
+  let body={x:state.x+state.vx*h,y:state.y+state.vy*h,vx:state.vx,vy:state.vy};solidDroneStep(body);
+  state.x=body.x;state.y=body.y;state.vx=body.vx;state.vy=body.vy;
+  const n=state.load.length;
+  for(let i=0;i<n;i++){
+   const c=state.load[i],offset=(i-(n-1)/2)*50;
+   const tx=state.x+offset-clamp(state.vx*.10,-26,26),ty=Math.min(GROUND-27,state.y+59+clamp(state.vy*.025,-6,10));
+   c.vx+=(tx-c.x)*31*h-c.vx*8*h;
+   c.vy+=(ty-c.y)*31*h-c.vy*8*h;
+   let cb={x:c.x+c.vx*h,y:c.y+c.vy*h,vx:c.vx,vy:c.vy};solidStep(cb,21,'cargo',c);
+   c.x=cb.x;c.y=cb.y;c.vx=cb.vx;c.vy=cb.vy;
+   const anchorX=state.x+offset*.6,anchorY=state.y+16;
+   const tetherLength=dist(c.x,c.y,anchorX,anchorY),maxLen=93;
+   if(tetherLength>maxLen){const pull=(tetherLength-maxLen)/tetherLength;
+    c.x-=(c.x-anchorX)*pull*.86;c.y-=(c.y-anchorY)*pull*.86;
+    let second={x:c.x,y:c.y,vx:c.vx,vy:c.vy};solidStep(second,21,'cargo',c);
+    c.x=second.x;c.y=second.y;c.vx=second.vx;c.vy=second.vy
+   }
+  }
+ }
+ syncCargo();
+ state.battery=Math.max(0,state.battery-dt*(.43+(state.boost?2.4:0)+state.load.length*.17)*(d.id==='titan'?1.10:1));
+ if(!state.load.length&&dist(state.x,state.y,depot.x,depot.y)<118)state.battery=Math.min(d.battery,state.battery+dt*14);
+ if(state.battery<=0){fail('Battery depleted. Return to the cyan rooftop pad to recharge.');return}
+ if(state.hull<=0){fail('Hull integrity depleted after collisions.');return}
+ if(state.load.some(c=>c.integrity<=0)){fail('A cargo crate was damaged beyond repair.');return}
+ if(Math.random()<dt*(state.boost?28:10))emit(state.x-22,state.y+9,1,state.boost?'#ffde93':'#a2f7ea');
+ for(const p of state.particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.984;p.vy*=.984;p.life-=dt}
+ state.particles=state.particles.filter(p=>p.life>0);
+ for(const p of state.popups){p.y-=22*dt;p.life-=dt}state.popups=state.popups.filter(p=>p.life>0);
+ updateUI()
+}
+function updateUI(){
+ const l=level(),d=drone(),t=state.load.length?target():depot;
+ const nearDrop=state.load.length&&dist(state.x,state.y,t.x,t.y)<112;
+ const nearDepot=dist(state.x,state.y,depot.x,depot.y)<112;
+ const percent=clamp(state.x/WORLD_W*100,0,100);
+ $('hudTime').textContent=`${String(Math.floor(Math.max(0,state.time)/60)).padStart(2,'0')}:${String(Math.floor(Math.max(0,state.time)%60)).padStart(2,'0')}`;
+ $('hudTime').style.color=state.time<30?'#ff7b82':'#f5fcff';
+ $('hudScore').textContent=String(state.score).padStart(5,'0');$('missionName').textContent=l.name;$('missionDesc').textContent=l.subtitle;
+ $('delivered').textContent=`${state.delivered} / ${l.goals}`;
+ $('speed').innerHTML=`${Math.round(Math.hypot(state.vx,state.vy)*.22)} <span style="font-size:10px;color:#829baa">km/h</span>`;
+ const batteryPc=state.battery/d.battery*100,hullPc=state.hull/d.hull*100;
+ $('batteryText').textContent=Math.ceil(batteryPc)+'%';$('hullText').textContent=Math.ceil(hullPc)+'%';
+ $('cargoText').textContent=state.load.length?Math.ceil(state.cargo)+'%':'STANDBY';
+ $('batteryFill').style.width=batteryPc+'%';$('hullFill').style.width=hullPc+'%';$('cargoFill').style.width=(state.load.length?state.cargo:100)+'%';
+ $('batteryFill').style.background=batteryPc<25?'#ff6b68':'var(--cyan)';$('hullFill').style.background=hullPc<30?'#ff6b68':'var(--gold)';$('cargoFill').style.background=state.cargo<30?'#ff6b68':'#94cfff';
+ $('progressFill').style.width=percent+'%';$('progressMarker').style.left=percent+'%';$('progressText').textContent=`${Math.floor(percent)}% OF ROUTE`;
+ $('activeDrone').textContent=d.short;$('sidebarDrone').textContent=d.short;
+ $('loadText').textContent=`${state.load.length}/${d.capacity}${l.kind==='heavy'&&d.id==='industrial'&&state.load.length?' · FULL':''}`;
+ $('objectiveText').textContent=state.load.length?`DELIVER PACKAGE ${state.delivered+1}`:`PICK UP ${l.kind==='heavy'?'GOLD ':''}ROOFTOP SUPPLIES`;
+ $('objectiveSub').textContent=state.load.length?`Fly east to the golden pads. ${state.load.length} crate(s) aboard · ${l.kind.toUpperCase()}.`:'Return west to the cyan rooftop platform and press SPACE / E to hook cargo.';
+ $('prompt').innerHTML=state.mode!=='playing'?'MISSION CONTROL // STANDBY':nearDrop?'<strong>RESCUE PAD READY</strong> <span class="key">SPACE</span> DELIVER ONE CRATE':nearDepot&&canPick()?`<strong>ROOFTOP DEPOT</strong> <span class="key">SPACE</span> PICK CRATE (${state.load.length}/${d.capacity})`:state.load.length?`→ RESCUE PAD · <strong>${Math.round(dist(state.x,state.y,t.x,t.y))} m</strong> · LOAD ${state.load.length}/${d.capacity}`:`← RETURN TO <strong>CITY DEPOT</strong> · ${Math.round(dist(state.x,state.y,depot.x,depot.y))} m`;
+ $('missionList').innerHTML=levels.map((v,i)=>`<div class="missionrow"><div class="node ${i<state.lv?'done':i===state.lv?'on':''}">${i<state.lv?'✓':String(i+1).padStart(2,'0')}</div><div><b>${v.name}</b><small>${i<state.lv?'SECTOR SECURED':i===state.lv?'FLIGHT ASSIGNMENT':'AWAITING AUTHORIZATION'}</small></div></div>`).join('')
+}
 function pathRound(x,y,w,h,r=8){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
 function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
 function stroke(x1,y1,x2,y2,color='#fff',width=2){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineWidth=width;ctx.strokeStyle=color;ctx.stroke()}
@@ -197,22 +366,41 @@ function drawMoving(t){const active=state.lv>=1,hot=state.lv>=2;const cx=3082,cy
  // Gate and track provide a precise, readable moving collision bar in sectors 2–3.
  const gy=state.lv>=1?480+(Math.sin(t*1.48)+1)*61:512;rect(3411,400,178,13,'#687d8b');rect(3415,407,10,GROUND-407,'#6f8990');rect(3570,407,10,GROUND-407,'#6f8990');rect(3420,gy,160,30,'#f5bf51');stripes(3420,gy,160,30);beacon(3429,gy-8,t);beacon(3571,gy-8,t);label(state.lv>=1?'MOVING GATE ⚠':'FIXED GATE ⚠',3500,385,13,'#fff5c7','center',900);
  // Swinging crane hook activates only in the final sector.
- const ax=3890,ay=252,m=hot?Math.sin(t*1.23):0,hx=ax+m*142,hy=449+(hot?Math.cos(t*1.23)*64:0);stroke(ax,ay,hx,hy,'#8e9ca8',5);rect(ax-120,ay-13,220,18,'#8496a4');for(let x=ax-103;x<ax+90;x+=25)stroke(x,ay-11,x+20,ay+2,'#4a6075',3);ellipse(hx,hy,20,20,'#dba766');stripes(hx-17,hy-7,34,12);beacon(hx,hy-24,t);label(hot?'SWINGING HOOK ⚠':'PARKED HOOK ⚠',ax,ay-24,13,'#fff2ca','center',900)
+ const ax=3890,ay=252,m=hot?Math.sin(t*1.23):0,hx=ax+m*142,hy=449+(hot?Math.cos(t*1.23)*64:0);stroke(ax,ay,hx,hy,'#8e9ca8',5);rect(ax-120,ay-13,220,18,'#8496a4');for(let x=ax-103;x<ax+90;x+=25)stroke(x,ay-11,x+20,ay+2,'#4a6075',3);ellipse(hx,hy,20,20,'#dba766');stripes(hx-17,hy-7,34,12);beacon(hx,hy-24,t);label(hot?'SWINGING HOOK ⚠':'PARKED HOOK ⚠',ax,ay-24,13,'#fff2ca','center',900);
+ if(hot){const p=movingCircles(t)[0];glow(p.x,p.y,92,'#f66e85',.28);stroke(p.x-95,p.y+13,p.x+95,p.y+13,'#ff6c9980',3);ellipse(p.x,p.y,30,17,'#293c58');rect(p.x-26,p.y-7,52,10,'#e67380');ellipse(p.x-17,p.y-11,6,5,'#ffedaf');ellipse(p.x+17,p.y-11,6,5,'#ffedaf');beacon(p.x,p.y-26,t);label('SECURITY PATROL ⚠',p.x,p.y-49,12,'#fff4cc','center',900)}
 }
 function drawPad(x,y,kind,t,active){const c=kind==='pickup'?'#4af9df':'#ffd36f';glow(x,y,95,c,active?.40:.18);ctx.save();ctx.translate(x,y);ellipse(0,1,80,16,'#283b56');ellipse(0,-3,72,12,kind==='pickup'?'#296a78':'#987146');ctx.strokeStyle=c;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(0,-3,67,10,0,0,TAU);ctx.stroke();for(let j=-1;j<=1;j++){rect(j*30-7,-10,13,6,c)}ellipse(0,-5,15,6,'#fff5d3');ctx.restore();if(active){glow(x,y-100,118,c,.24);stroke(x,y-8,x,y-119,c+'a6',2);const ey=-122-Math.sin(t*3)*6;label(kind==='pickup'?'PICK UP  ◆':'DROP OFF  ✚',x,y+ey-17,16,kind==='pickup'?'#bdfff0':'#fff3ce','center',900);ctx.save();ctx.globalAlpha=.65+Math.sin(t*3)*.2;ctx.beginPath();ctx.moveTo(x,y+ey);ctx.lineTo(x-10,y+ey-14);ctx.lineTo(x+10,y+ey-14);ctx.closePath();ctx.fillStyle=c;ctx.fill();ctx.restore()}}
-function drawCrate(x,y,t,icon=true){ctx.save();ctx.translate(x,y);ctx.fillStyle='#6d442e';rect(-17,-15,36,32,'#7e502e');rect(-18,-17,33,28,'#d89f56');rect(-15,-15,28,6,'#f3c275');rect(-17,-17,6,30,'#b87839');stroke(-13,10,11,-11,'#97602c',3);stroke(12,11,-12,-9,'#97602c',3);rect(0,-7,13,9,'#fff0bb');if(icon)label('+',7,1,9,'#be6547','center',900);ctx.restore()}
-function drawDrone(t){ctx.save();ctx.translate(state.x,state.y);ctx.rotate(state.angle);
- // Propeller motion, rotor guards and animated lighting communicate a side profile.
- glow(0,-2,87,'#ffffff',.13);stroke(-40,-5,-17,4,'#425877',7);stroke(17,4,40,-5,'#425877',7);for(let x of [-47,47]){ctx.strokeStyle='#d6e6e9';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,-22,32,11,0,0,TAU);ctx.stroke();ellipse(x,-23,32,4,'#a7f5fb68');stroke(x-35,-23,x+35,-23,'#f8feffbb',4);stroke(x,-23,x,-6,'#4c6d82',5);ellipse(x,-22,5,5,'#ffe6a7')}
- // Sleek teal-and-ivory emergency drone fuselage.
- ctx.fillStyle='#182f4d';pathRound(-31,-11,63,34,12);ctx.fill();ctx.fillStyle='#f7c96e';pathRound(-26,-16,53,23,11);ctx.fill();ctx.fillStyle='#fff1c9';pathRound(-25,-14,50,9,6);ctx.fill();rect(-19,-5,21,8,'#4cbcc4');ellipse(20,0,11,9,'#365675');ellipse(23,0,5,5,'#88e7ff');ellipse(-18,7,4,4,'#ff7b6b');stroke(-17,21,-25,30,'#b7d5dd',3);stroke(17,21,25,30,'#b7d5dd',3);stroke(-31,30,32,30,'#b7d5dd',4);ellipse(0,12,9,5,'#5d7b89');ellipse(-29,4,3,4,'#ff8473');ctx.restore();
- if(state.carrying){stroke(state.x,state.y+15,state.cx,state.cy-17,'#324e5b',4);stroke(state.x,state.y+15,state.cx,state.cy-17,'#e1f7e0',1.6);drawCrate(state.cx,state.cy,t)}}
+function drawCrate(x,y,t,type='standard',icon=true){ctx.save();ctx.translate(x,y);const heavy=type==='heavy',fragile=type==='fragile';
+ rect(-18,-16,36,32,heavy?'#7b542c':fragile?'#527bb7':'#b57a3b');
+ rect(-15,-13,30,25,heavy?'#e9b94f':fragile?'#87c9f4':'#eeb565');
+ rect(-15,-15,30,5,heavy?'#fff19d':fragile?'#caefff':'#f5ce89');
+ stroke(-13,12,13,-12,heavy?'#94621e':'#97602c',3);stroke(13,12,-13,-12,heavy?'#94621e':'#97602c',3);
+ rect(-6,-6,12,12,heavy?'#fff1a7':'#fff4d6');if(icon)label(heavy?'★':fragile?'!':'+',0,3,12,heavy?'#986220':'#bd6b45','center',900);ctx.restore()
+}
+function drawDrone(t){const d=drone();ctx.save();ctx.translate(state.x,state.y);ctx.rotate(state.angle);ctx.scale(d.halfW/80,d.halfH/35);
+ // Three recognizable airframes: cyan speedster, yellow industrial carrier, red armored Titan.
+ glow(0,-2,90,d.color,.20);
+ stroke(-40,-5,-17,4,'#425877',7);stroke(17,4,40,-5,'#425877',7);
+ for(let x of [-47,47]){ctx.strokeStyle=d.color;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,-22,32,11,0,0,TAU);ctx.stroke();ellipse(x,-23,32,4,'#a7f5fb68');stroke(x-35,-23,x+35,-23,'#f8feffbb',4);stroke(x,-23,x,-6,'#4c6d82',5);ellipse(x,-22,5,5,d.color)}
+ ctx.fillStyle='#182f4d';pathRound(-34,-13,68,37,d.id==='titan'?7:14);ctx.fill();
+ ctx.fillStyle=d.color;pathRound(-29,-17,58,23,d.id==='titan'?6:12);ctx.fill();
+ ctx.fillStyle='#fff5d5';pathRound(-23,-13,46,8,5);ctx.fill();
+ rect(-19,-4,22,7,'#438f9b');ellipse(21,0,11,9,'#365675');ellipse(24,0,5,5,'#88e7ff');ellipse(-23,8,4,4,'#ff7b6b');
+ if(d.id==='titan'){rect(-39,6,13,15,'#bd554d');rect(26,6,13,15,'#bd554d');rect(-27,11,54,7,'#db7f66');label('T',0,8,11,'#fff7e3','center',900)}
+ if(d.id==='scout'){stroke(-1,-17,1,-29,'#dbffff',3);ellipse(1,-29,3,3,'#72fff1');label('S',0,9,11,'#164b5d','center',900)}
+ if(d.id==='industrial'){rect(-16,13,34,7,'#efac55');label('04',0,9,11,'#23485d','center',900)}
+ stroke(-17,21,-25,30,'#b7d5dd',3);stroke(17,21,25,30,'#b7d5dd',3);stroke(-31,30,32,30,'#b7d5dd',4);ellipse(0,12,9,5,'#5d7b89');ctx.restore();
+ for(let i=0;i<state.load.length;i++){const c=state.load[i],anchorX=state.x+(i-(state.load.length-1)/2)*29;
+  stroke(anchorX,state.y+16,c.x,c.y-17,'#1b3d55',4);stroke(anchorX,state.y+16,c.x,c.y-17,'#eaffda',1.6);
+  drawCrate(c.x,c.y,t,c.type)
+ }
+}
 function world(t){ground();for(let i=0;i<structures.length;i++){const s=structures[i];if(s.type==='building')drawBuilding(s,i)};
  // City details in the foreground.
  for(let i=0;i<5;i++){const x=78+i*165;if(x>900)break;if(i!==2)lamp(x+26)}tree(952);tree(1030);lamp(1005);for(let i=0;i<8;i++){const x=1230+i*420;tree(x);if(i%2===0)lamp(x+120)}
  for(let i=0;i<structures.length;i++){const s=structures[i];if(s.type==='waterTower')rooftopTower(s.x+22,s.y+8);else if(s.type!=='building')obstacle(s,i,t)}drawMoving(t);
  // Pickup remains on the city rooftop, all drop pads are at the far ground course.
- drawPad(depot.x,depot.padY,'pickup',t,!state.carrying);if(!state.carrying)drawCrate(depot.x,depot.padY-30+Math.sin(t*2)*4,t);
+ drawPad(depot.x,depot.padY,'pickup',t,canPick());if(state.delivered+state.load.length<level().goals)drawCrate(depot.x,depot.padY-30+Math.sin(t*2)*4,t,level().kind);
  const l=level();for(let i=0;i<l.targets.length;i++){let x=l.targets[i],active=i===state.delivered;drawPad(x,GROUND-8,'drop',t,active);if(i<state.delivered){label('✓ SECURED',x,GROUND-58,13,'#f4e6ab','center',900)}else if(!active){label(`STATION ${i+1}`,x,GROUND-63,12,'#ffe9be','center',800)}}
  // Direction signage and distance milestones.
  const signs=[{x:1320,s:'INDUSTRIAL DISTRICT'},{x:2175,s:'LOW CLEARANCE ROUTE'},{x:2930,s:'ENERGY FIELDS'},{x:4110,s:'RESCUE CORRIDOR'}];for(const sign of signs){stroke(sign.x,GROUND,sign.x,GROUND-49,'#526b71',5);rect(sign.x-82,GROUND-91,164,39,'#41637a');rect(sign.x-79,GROUND-88,158,33,'#5f8195');label(sign.s,sign.x,GROUND-67,11,'#fff4d8','center',800)}
@@ -229,7 +417,7 @@ function render(now){const dt=clamp((now-last)/1000||.016,0,.034);last=now;updat
  const shake=state.shake>0?Math.random()*state.shake*14-state.shake*7:0;ctx.save();ctx.translate(vw/2+shake,vh/2+shake*.4);ctx.scale(scale,scale);ctx.translate(-state.camX,-WORLD_H/2);world(state.elapsed);drawEffects();drawDrone(state.elapsed);ctx.restore();drawCourseHUD();if(state.flash>0){ctx.fillStyle=`rgba(255,117,95,${state.flash*.55})`;ctx.fillRect(0,0,vw,vh)}requestAnimationFrame(render)}
 showTitle();requestAnimationFrame(render);
 // Exposed only for deterministic smoke testing; no external libraries or assets needed.
-window.__skylineTest={state,levels,structures,fixedSolids,target,interact,startMission,update,solidStep};
+window.__skylineTest={state,levels,structures,fixedSolids,DRONES,target,interact,startMission,update,solidStep,solidDroneStep,droneGround,resolveAABB,resolveRect,movingSolids,movingCircles,canPick,slotsUsed,renderHangar};
 })();
 </script>
 </body>
